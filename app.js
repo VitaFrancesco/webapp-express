@@ -7,7 +7,9 @@ const moviesRouter = require('./router/movies');
 const errorsHandler = require('./middleware/errorsHandler');
 const notFound = require('./middleware/notFound');
 
-app.use(cors());
+app.use(cors(
+    origin = process.env.ORIGIN
+));
 app.use(express.static('public'));
 app.use(express.json());
 app.get('/', (req, res) => {
