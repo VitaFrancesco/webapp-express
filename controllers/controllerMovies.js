@@ -15,7 +15,7 @@ function index(_, res) {
 function show(req, res) {
     const { id } = req.params;
 
-    const movieSql = 'SELECT * FROM `movies` WHERE `movies`.`id`=?';
+    const movieSql = 'SELECT `movies`.*, AVG(`reviews`.`vote`) AS `avg_vote` FROM `movies` JOIN `reviews` ON `movies`.`id`=`reviews`.`movie_id` WHERE `movies`.`id`=?';
 
     const reviewSql = 'SELECT * FROM `reviews` WHERE `reviews`.`movie_id`=?';
 
