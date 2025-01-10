@@ -2,10 +2,13 @@ const connection = require('../data/db');
 
 function index(_, res) {
 
-    const sql = 'SELECT * FROM `movies`';
+    const sql = 'SELECT `movies`.*, AVG(`reviews`.`vote`) AS `avg_vote` FROM `movies` JOIN `reviews` ON `movies`.`id`=`reviews`.`movie_id` GROUP BY `movies`.`id`';
 
     connection.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: 'Database query failed' });
+        results.map((res) => {
+            res.image = `http://localhost:3000/${res.image}`
+        })
         res.json(results);
     })
 
@@ -29,6 +32,7 @@ function show(req, res) {
             if (err) return res.status(500).json({ error: 'Database query failed' });
 
             movie.reviews = reviewResult;
+            movie.image = `http://localhost:3000/${movie.image}`
             res.json(movie);
         })
 
