@@ -1,8 +1,13 @@
 const connection = require('../data/db');
 
-function index(_, res) {
+function index(req, res) {
+    let sql = 'SELECT `movies`.*, AVG(`reviews`.`vote`) AS `avg_vote` FROM `movies` JOIN `reviews` ON `movies`.`id`=`reviews`.`movie_id`';
 
-    const sql = 'SELECT `movies`.*, AVG(`reviews`.`vote`) AS `avg_vote` FROM `movies` JOIN `reviews` ON `movies`.`id`=`reviews`.`movie_id` GROUP BY `movies`.`id`';
+    if (req.query.search) {
+        sql += ` WHERE title LIKE '%${req.query.search}%' OR director LIKE '%${req.query.search}%' OR abstract LIKE '%${req.query.search}%'`
+    }
+
+    sql += ' GROUP BY `movies`.`id`'
 
     connection.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: 'Database query failed' });
@@ -39,5 +44,16 @@ function show(req, res) {
     });
 };
 
+function store(req, res) {
+    const addSql = "INSERT INTO `reviews` (`movie_id`, `name`, `vote`, `text`) VALUES (?, ?, ?, ?)";
+    const { movie_id, name, vote, text } = req.body;
 
-module.exports = { index, show };
+    connection.query(addSql, [movie_id, name, vote, text], (err, _) => {
+        if (err) return res.status(500).json({ error: 'Database query failed' });
+
+        res.status(201)
+    })
+}
+
+
+module.exports = { index, show, store };
