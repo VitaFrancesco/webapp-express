@@ -5,10 +5,10 @@ function validateObj(req, res, next) {
     if (!movie_id) {
         errors.push('Movie ID is required');
     };
-    if (!name) {
+    if (!name.trim()) {
         errors.push('Name is required');
     };
-    if (!text) {
+    if (!text.trim()) {
         errors.push('Text is required');
     };
     if (!vote) {
