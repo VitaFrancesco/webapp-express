@@ -11,5 +11,16 @@ function store(req, res) {
     })
 }
 
+function destroy(req, res) {
+    const removeSql = 'DELETE FROM `db_movies`.`reviews` WHERE (`id` = ?);'
+    const { id } = req.params
 
-module.exports = { store };
+    connection.query(removeSql, [id], (err, _) => {
+        if (err) return res.status(500).json({ error: 'Database query failed' });
+
+        res.status(204)
+    })
+}
+
+
+module.exports = { store, destroy };

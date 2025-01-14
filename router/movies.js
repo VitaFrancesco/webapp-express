@@ -20,7 +20,7 @@ router.post('/:id/reviews', validateObj, reviewsController.store);
 // // modify
 // router.patch('/:id', moviesController.modify);
 
-// // destroy
-// router.delete('/:id', moviesController.destroy);
+// destroy review
+router.delete('/:id/reviews', reviewsController.destroy);
 
 module.exports = router;
