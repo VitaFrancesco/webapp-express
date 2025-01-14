@@ -21,6 +21,8 @@ function index(req, res) {
 };
 
 function show(req, res) {
+    console.log('show controller movies');
+
     const { id } = req.params;
 
     const movieSql = 'SELECT `movies`.*, AVG(`reviews`.`vote`) AS `avg_vote` FROM `movies` JOIN `reviews` ON `movies`.`id`=`reviews`.`movie_id` WHERE `movies`.`id`=?';

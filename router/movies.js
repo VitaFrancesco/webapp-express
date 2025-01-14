@@ -5,6 +5,8 @@ const moviesController = require('../controllers/controllerMovies');
 const reviewsController = require('../controllers/controllerReviews');
 const validateObj = require('../middleware/ValidateObj');
 
+
+
 // index
 router.get('/', moviesController.index);
 
@@ -14,13 +16,15 @@ router.get('/:id', moviesController.show);
 // store reviews
 router.post('/:id/reviews', validateObj, reviewsController.store);
 
+// destroy review
+router.delete('/:id/reviews', reviewsController.destroy);
+
 // // update
 // router.put('/:id', moviesController.update);
 
 // // modify
 // router.patch('/:id', moviesController.modify);
 
-// destroy review
-router.delete('/:id/reviews', reviewsController.destroy);
+
 
 module.exports = router;
