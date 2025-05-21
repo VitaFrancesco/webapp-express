@@ -1,7 +1,7 @@
 const connection = require('../data/db');
 
 function index(req, res) {
-    let sql = 'SELECT `movies`.*, AVG(`reviews`.`vote`) AS `avg_vote` FROM `movies` JOIN `reviews` ON `movies`.`id`=`reviews`.`movie_id`';
+    let sql = 'SELECT `movies`.*, AVG(`reviews`.`vote`) AS `avg_vote` FROM `movies` LEFT JOIN `reviews` ON `movies`.`id`=`reviews`.`movie_id`';
 
     if (req.query.search) {
         sql += ` WHERE title LIKE '%${req.query.search}%' OR director LIKE '%${req.query.search}%' OR abstract LIKE '%${req.query.search}%'`
