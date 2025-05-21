@@ -29,21 +29,34 @@ function show(req, res) {
 
     const reviewSql = 'SELECT * FROM `reviews` WHERE `reviews`.`movie_id`=?';
 
-    connection.query(movieSql, [id], (err, movieResult) => {
+    const noReviewSql = 'SELECT `movies`.* FROM `movies` WHERE `movies`.`id`=?'
+
+    connection.query(reviewSql, [id], (err, reviewResult) => {
         if (err) return res.status(500).json({ error: 'Database query failed' });
-        if (movieResult.length === 0) return res.status(404).json({ error: 'Movie not found' });
 
-        const movie = movieResult[0];
+        const reviews = reviewResult;
 
-        connection.query(reviewSql, [id], (err, reviewResult) => {
-            if (err) return res.status(500).json({ error: 'Database query failed' });
+        if (reviews.length) {
+            connection.query(movieSql, [id], (err, movieResult) => {
+                if (err) return res.status(500).json({ error: 'Database query failed' });
+                if (movieResult.length === 0) return res.status(404).json({ error: 'Movie not found' });
 
-            movie.reviews = reviewResult;
-            movie.image = `http://localhost:3000/${movie.image}`
-            res.json(movie);
-        })
+                const movie = movieResult[0];
+                movie.reviews = reviews
+                movie.image = `http://localhost:3000/${movie.image}`;
+                res.json(movie)
+            });
+        } else {
+            connection.query(noReviewSql, [id], (err, movieResult) => {
+                if (err) return res.status(500).json({ error: 'Database query failed' });
+                if (movieResult.length === 0) return res.status(404).json({ error: 'Movie not found' });
+                const movie = movieResult[0];
+                movie.image = `http://localhost:3000/${movie.image}`;
+                res.json(movie)
+            });
+        }
+    })
 
-    });
 };
 
 
